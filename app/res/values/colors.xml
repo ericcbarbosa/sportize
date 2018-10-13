@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorLighter">#ffffff</color>
+    <color name="colorLight">#cecece</color>
+    <color name="colorDark">#666666</color>
+    <color name="colorDarker">#222222</color>
+
+
+    <color name="colorPrimary">#ff4545</color>
+    <color name="colorPrimaryInvert">#ffffff</color>
+    <color name="colorPrimaryDark">#9b2626</color>
+
+    <color name="colorAccent">#4070ff</color>
+    <color name="colorAccentInvert">#ffffff</color>
+
+    <color name="colorSuccess">#12b72d</color>
+    <color name="colorSuccessInvert">#ffffff</color>
+
+    <color name="colorDanger">#ff004d</color>
+    <color name="colorDangerInvert">#ffffff</color>
+
+    <color name="colorInfo">#5e87ff</color>
+    <color name="colorInfoInvert">#ffffff</color>
+
+    <color name="colorWarning">#dfc42a</color>
+    <color name="colorWarningInvert">#ffffff</color>
+
+    <color name="colorGradientStart">#ff4545</color>
+    <color name="colorGradientEnd">#ff6363</color>
+</resources>

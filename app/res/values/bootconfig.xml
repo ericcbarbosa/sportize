@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="remoteAccessConsumerKey">3MVG9vrJTfRxlfl5fRe2VYx1W91T6mW81y9z7zs8SUkeXNGItILvHiNjeh0z3LsKZ1o9yXJr16p8QJ7kBZBpS</string>
+    <string name="oauthRedirectURI">myapp:///sportize/api/auth//success</string>
+    <string-array name="oauthScopes">
+        <item>api</item>
+		<item>web</item>
+    </string-array>
+</resources>

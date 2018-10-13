@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_type">br.com.sportize.app.login</string>
+	<string name="app_name"><b>Sportize</b></string>
+	<string name="app_package">br.com.sportize.app</string>
+    <string name="welcome">Welcome %s</string>
+	<string name="logout_button">Logout</string>
+	<string name="fetch_contacts_button">Fetch Contacts</string>
+	<string name="fetch_accounts_button">Fetch Accounts</string>
+	<string name="clear_button">Clear</string>
+
+	<!-- GAVETA -->
+	<string name="navigation_drawer_open">Abrir menu</string>
+	<string name="navigation_drawer_close">Fechar menu</string>
+	<string name="nav_header_title">Android Studio</string>
+	<string name="nav_header_subtitle">android.studio@android.com</string>
+	<string name="nav_header_desc">Navigation header</string>
+	<string name="action_settings">Configurações</string>
+	<string name="action_login">Login</string>
+
+	<!-- MENU -->
+	<string name="nav_item_user">Usuário</string>
+	<string name="nav_item_groups">Grupos</string>
+	<string name="nav_item_about">Sobre</string>
+	<string name="nav_item_config">Configurações</string>
+	<string name="nav_item_logoff">Deslogar</string>
+
+	<!-- LOGIN -->
+	<string name="login_btn_access">Entrar</string>
+
+
+	<!-- User : Data -->
+	<string name="user_out_name">Nome</string>
+	<string name="user_out_email">E-mail</string>
+	<string name="user_out_password">Senha</string>
+	<string name="user_out_address">Endereço</string>
+	<string name="user_out_neighbor">Bairro</string>
+	<string name="user_out_city">Cidade</string>
+	<string name="user_out_state">Estado</string>
+
+	<!-- User : Actions -->
+	<string name="user_remove">Remover usuário</string>
+	<string name="user_add">Cadastrar</string>
+	<string name="user_cancel">Cancelar</string>
+
+	<!-- User : Titles & Page Descriptions -->
+	<string name="user_title_add">Cadastrar usuário</string>
+	<string name="user_title_edit">Editar dados do usuário</string>
+	<string name="user_Description_add">Preencha os dados abaixo para adicionar um novo usuário</string>
+	<string name="user_Description_edit">Altere os dados abaixo e clique no botão salvar para alterar os dados do usuário</string>
+
+	<!-- Group : Data -->
+	<string name="group_out_name">Nome</string>
+	<string name="group_out_description">Descrição</string>
+	<string name="group_detail_out_name">Nome do Grupo</string>
+	<string name="group_detail_out_description">Descrição do Grupo</string>
+
+	<!-- Group : Actions -->
+	<string name="group_remove">Remover</string>
+	<string name="group_detail">Ver mais</string>
+	<string name="group_add">Adicionar grupo</string>
+	<string name="group_cancel">Cancelar</string>
+
+	<!-- User : Titles & Page Descriptions -->
+	<string name="group_title_add">Cadastrar grupo</string>
+	<string name="group_title_edit">Editar dados do grupo</string>
+	<string name="group_description_add">Preencha os dados abaixo para adicionar um novo grupo</string>
+	<string name="group_description_edit">Altere os dados abaixo e clique no botão salvar para alterar os dados do grupo</string>
+
+	<!-- Event : Data -->
+	<string name="event_out_name">Nome</string>
+	<string name="event_out_description">Descrição</string>
+	<string name="event_out_date">Data</string>
+	<string name="event_out_address">Endereço</string>
+	<string name="event_out_neighbor">Bairro</string>
+	<string name="event_out_city">Cidade</string>
+	<string name="event_out_state">Estado</string>
+	<string name="event_out_group">Grupo</string>
+
+	<!-- Event  : Actions -->
+	<string name="event_remove">Remover evento</string>
+	<string name="event_add">Adicionar evento</string>
+	<string name="title_activity_login">Entrar</string>
+
+	<!-- Strings related to login -->
+	<string name="prompt_email">Email</string>
+	<string name="prompt_password">Senha</string>
+	<string name="action_sign_in">Cadastro</string>
+	<string name="action_sign_in_short">Cadastrar</string>
+	<string name="error_invalid_email">E-mail inválido</string>
+	<string name="error_invalid_password">A senha é muito curta</string>
+	<string name="error_incorrect_password">A senha está incorreta</string>
+	<string name="error_field_required">Esté campo é obrigatório</string>
+	<string name="permission_rationale">"As permissões de contato são necessárias para autocomplete de e-mail"</string>
+</resources>
