@@ -11,7 +11,6 @@ import br.com.sportize.app.R;
 
 public class GroupViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnCreateContextMenuListener {
     public TextView name, description;
-    public Button btnRemover;
 
     MyLongClickListener longClickListener;
 
@@ -19,7 +18,6 @@ public class GroupViewHolder extends RecyclerView.ViewHolder implements View.OnL
         super(itemView);
         name = (TextView) itemView.findViewById(R.id.group_out_name);
         description = (TextView) itemView.findViewById(R.id.group_out_description);
-        btnRemover = itemView.findViewById(R.id.group_btn_remove);
 
         itemView.setOnLongClickListener(this);
         itemView.setOnCreateContextMenuListener(this);

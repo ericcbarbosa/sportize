@@ -1,206 +1,150 @@
-/*
- * Copyright (c) 2012-present, salesforce.com, inc.
- * All rights reserved.
- * Redistribution and use of this software in source and binary forms, with or
- * without modification, are permitted provided that the following conditions
- * are met:
- * - Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer.
- * - Redistributions in binary form must reproduce the above copyright notice,
- * this list of conditions and the following disclaimer in the documentation
- * and/or other materials provided with the distribution.
- * - Neither the name of salesforce.com, inc. nor the names of its contributors
- * may be used to endorse or promote products derived from this software without
- * specific prior written permission of salesforce.com, inc.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- */
 package br.com.sportize.app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatCallback;
+import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.view.ActionMode;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
 
-import com.salesforce.androidsdk.app.SalesforceSDKManager;
-import com.salesforce.androidsdk.rest.ApiVersionStrings;
 import com.salesforce.androidsdk.rest.RestClient;
-import com.salesforce.androidsdk.rest.RestClient.AsyncRequestCallback;
-import com.salesforce.androidsdk.rest.RestRequest;
-import com.salesforce.androidsdk.rest.RestResponse;
 import com.salesforce.androidsdk.ui.SalesforceActivity;
 
-import org.json.JSONArray;
-
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-
-import br.com.sportize.app.adapter.GroupAdapater;
-import br.com.sportize.app.model.Group;
-
-/**
- * Main activity
- */
-public class MainActivity extends SalesforceActivity {
+public class MainActivity extends SalesforceActivity
+        implements NavigationView.OnNavigationItemSelectedListener, AppCompatCallback {
 
     private RestClient client;
-    private ArrayAdapter<Group> listAdapter;
-    private ArrayList<Group> groupList;
+    private AppCompatDelegate delegate;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		// Setup view
-		setContentView(R.layout.main);
-	}
+        // Delegate
+        delegate = AppCompatDelegate.create(this, this);
+        delegate.onCreate(savedInstanceState);
+        delegate.setContentView(R.layout.activity_group_detail);
 
-	@Override
-	public void onResume() {
-		// Hide everything until we are logged in
-		findViewById(R.id.root).setVisibility(View.INVISIBLE);
+        setContentView(R.layout.activity_main);
 
-		groupList = new ArrayList<>();
-		listAdapter = new GroupAdapater(MainActivity.this, groupList);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-		ListView listView = findViewById(R.id.contacts_list);
-		listView.setAdapter(listAdapter);
+        delegate.setSupportActionBar(toolbar);
+        delegate.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Group group = groupList.get(position);
+        // Menu
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
-				Intent intent = new Intent(MainActivity.this, GroupDetailActivity.class);
-				intent.putExtra("id", group.getId());
-				intent.putExtra("name", group.getName());
-				intent.putExtra("description", group.getDescription());
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
 
-				startActivity(intent);
-			}
-		});
+    @Override
+    public void onResume() {
+        // Hide everything until we are logged in
+        findViewById(R.id.content_root).setVisibility(View.INVISIBLE);
+        super.onResume();
+    }
 
-		super.onResume();
-	}
-
-	@Override
-	public void onResume(RestClient client) {
+    @Override
+    public void onResume(RestClient client) {
         // Keeping reference to rest client
         this.client = client;
 
-		// Show everything
-		findViewById(R.id.root).setVisibility(View.VISIBLE);
+        // Show everything
+        findViewById(R.id.content_root).setVisibility(View.VISIBLE);
+    }
 
-		// Get Groups
-		try {
-			sendRequest("SELECT Id, Name, group_description__c FROM group__c\t");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			Toast.makeText(MainActivity.this, "Não foi possível baixar a lista de Grupos: \n"+e.getMessage(), Toast.LENGTH_LONG).show();
-		}
-	}
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
-	/**
-	 * Called when "Logout" button is clicked.
-	 *
-	 * @param v
-	 */
-	public void onLogoutClick(View v) {
-		SalesforceSDKManager.getInstance().logout(this);
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
 
-	/**
-	 * Called when "Clear" button is clicked.
-	 *
-	 * @param v
-	 */
-	public void onClearClick(View v) {
-		listAdapter.clear();
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
-	// TODO: Buscar os dados completos do User
-	public void onFetchUsersClick(View v) throws UnsupportedEncodingException {
-        sendRequest("SELECT player_id__c,name,email__c From player__c\t");
-	}
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
 
-	/**
-	 * Called when "Fetch Contacts" button is clicked
-	 *
-	 * @param v
-	 * @throws UnsupportedEncodingException
-	 */
-	public void onFetchContactsClick(View v) throws UnsupportedEncodingException {
-        sendRequest("SELECT Id, Name, group_description__c FROM group__c\t");
-	}
+        if (id == R.id.action_login) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
 
-	/**
-	 * Called when "Fetch Accounts" button is clicked
-	 *
-	 * @param v
-	 * @throws UnsupportedEncodingException
-	 */
-	public void onFetchAccountsClick(View v) throws UnsupportedEncodingException {
-//		sendRequest("SELECT Name FROM Account");
-	}
+            return true;
+        }
 
-	private void sendRequest(String soql) throws UnsupportedEncodingException {
-		RestRequest restRequest = RestRequest.getRequestForQuery(ApiVersionStrings.getVersionNumber(this), soql);
+        return super.onOptionsItemSelected(item);
+    }
 
-		client.sendAsync(restRequest, new AsyncRequestCallback() {
-			@Override
-			public void onSuccess(RestRequest request, final RestResponse result) {
-				result.consumeQuietly(); // consume before going back to main thread
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							listAdapter.clear();
-							JSONArray records = result.asJSONObject().getJSONArray("records");
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
 
-							// TODO: Extrair dados do JSON e transformar em User
-							for (int i = 0; i < records.length(); i++) {
+        if (id == R.id.nav_user) {
+//            Intent intent = new Intent(MainActivity.this, GroupsActivity.class);
+//
+//            startActivity(intent);
+        } else if (id == R.id.nav_groups) {
+            Intent intent = new Intent(MainActivity.this, GroupsActivity.class);
 
-								// TODO: Passar um User para o adapter
-								String groupId = records.getJSONObject(i).getString("Id");
-								String groupName = records.getJSONObject(i).getString("Name");
-								String groupDescription = records.getJSONObject(i).getString("group_description__c");
+            startActivity(intent);
+        } else if (id == R.id.nav_about) {
 
-								Group g = new Group(groupId, groupName, groupDescription);
-								groupList.add(g);
-							}
-						} catch (Exception e) {
-							onError(e);
-						}
-					}
-				});
-			}
+        } else if (id == R.id.nav_config) {
 
-			@Override
-			public void onError(final Exception exception) {
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						Toast.makeText(MainActivity.this,
-								MainActivity.this.getString(
-										SalesforceSDKManager.getInstance().getSalesforceR().stringGenericError(),
-										exception.toString()
-								),
-								Toast.LENGTH_LONG).show();
-					}
-				});
-			}
-		});
-	}
+        } else if (id == R.id.nav_logoff) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {}
+
+    @Override
+    public void onSupportActionModeStarted(ActionMode mode) {}
+
+    @Override
+    public void onSupportActionModeFinished(ActionMode mode) {}
+
+    @Nullable
+    @Override
+    public ActionMode onWindowStartingSupportActionMode(ActionMode.Callback callback) {
+        return null;
+    }
 }
