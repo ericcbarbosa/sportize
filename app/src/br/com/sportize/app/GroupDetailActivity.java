@@ -214,7 +214,6 @@ public class GroupDetailActivity extends SalesforceActivity implements AppCompat
         });
     }
 
-
     @Override
     public void onResume() {
         // Hide everything until we are logged in

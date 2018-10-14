@@ -75,12 +75,12 @@ public class RegisterActivity extends AppCompatActivity {
                 "Estado: " + user.getState() + "\n";
 
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-        goToLoginPage();
+//        goToLoginPage();
     }
 
     public void goToLoginPage() {
-        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish();
+//        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+//        startActivity(intent);
+//        finish();
     }
 }

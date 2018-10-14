@@ -14,13 +14,28 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.salesforce.androidsdk.app.SalesforceSDKManager;
+import com.salesforce.androidsdk.rest.ApiVersionStrings;
 import com.salesforce.androidsdk.rest.RestClient;
+import com.salesforce.androidsdk.rest.RestRequest;
+import com.salesforce.androidsdk.rest.RestResponse;
 import com.salesforce.androidsdk.ui.SalesforceActivity;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+
+import br.com.sportize.app.model.Group;
 
 public class MainActivity extends SalesforceActivity
         implements NavigationView.OnNavigationItemSelectedListener, AppCompatCallback {
 
+    private TextView txtName;
+    private TextView txtEmail;
     private RestClient client;
     private AppCompatDelegate delegate;
 
@@ -65,6 +80,12 @@ public class MainActivity extends SalesforceActivity
 
         // Show everything
         findViewById(R.id.content_root).setVisibility(View.VISIBLE);
+
+        try {
+            setUserData();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -97,8 +118,8 @@ public class MainActivity extends SalesforceActivity
         }
 
         if (id == R.id.action_login) {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//            startActivity(intent);
 
             return true;
         }
@@ -113,9 +134,7 @@ public class MainActivity extends SalesforceActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_user) {
-//            Intent intent = new Intent(MainActivity.this, GroupsActivity.class);
-//
-//            startActivity(intent);
+
         } else if (id == R.id.nav_groups) {
             Intent intent = new Intent(MainActivity.this, GroupsActivity.class);
 
@@ -131,6 +150,59 @@ public class MainActivity extends SalesforceActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void setUserData() throws UnsupportedEncodingException {
+        RestRequest restRequest = RestRequest.getRequestForQuery(
+                ApiVersionStrings.getVersionNumber(this),
+                "SELECT id, Name, email FROM user WHERE id = '0055A000006LID5QAO'\t"
+        );
+
+        client.sendAsync(restRequest, new RestClient.AsyncRequestCallback() {
+            @Override
+            public void onSuccess(RestRequest request, final RestResponse result) {
+                result.consumeQuietly(); // consume before going back to main thread
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            JSONArray record = result.asJSONObject().getJSONArray("records");
+
+                            JSONObject user = record.getJSONObject(0);
+
+                            String name = user.getString("Name");
+                            String email = user.getString("Email");
+
+                            if (name != null && email != null) {
+                                txtName = findViewById(R.id.drawer_nav_header_name);
+                                txtEmail = findViewById(R.id.drawer_nav_header_email);
+
+                                txtName.setText(name);
+                                txtEmail.setText(email);
+                            }
+
+                        } catch (Exception e) {
+                            onError(e);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onError(final Exception exception) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this,
+                                MainActivity.this.getString(
+                                        SalesforceSDKManager.getInstance().getSalesforceR().stringGenericError(),
+                                        exception.toString()
+                                ),
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
     }
 
     @Override
