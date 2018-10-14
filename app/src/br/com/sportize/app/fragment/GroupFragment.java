@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -26,13 +25,8 @@ import br.com.sportize.app.R;
 import br.com.sportize.app.adapter.GroupAdapater;
 import br.com.sportize.app.model.Group;
 import br.com.sportize.app.model.User;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
-//import br.com.sportize.app.GroupDetailActivity;
+import br.com.sportize.app.GroupDetailActivity;
 
 public class GroupFragment extends Fragment {
     private ListView listview;
@@ -67,62 +61,33 @@ public class GroupFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        try {
-            this.fetchData();
-        } catch (Exception  e) {
-            Log.d("==> Exception", e + "\n\n");
-            e.printStackTrace();
-        }
-
-        membersA = new ArrayList<>();
-        membersA.add(new User(
-                1,
-                "João",
-                "joao@joao.com",
-                "joao",
-                "Rua jão, 100",
-                "joaozinhos",
-                "joaolandia",
-                "JO"
-        ));
-
-        membersA.add(new User(
-                2,
-                "Maria",
-                "maria@maria.com",
-                "maria",
-                "Rua maria, 100",
-                "mariazinahs",
-                "marialandia",
-                "MA"
-        ));
-
+//        try {
+//            this.fetchData();
+//        } catch (Exception  e) {
+//            Log.d("==> Exception", e + "\n\n");
+//            e.printStackTrace();
+//        }
 
         groupsList = new ArrayList<>();
         groupsList.add(new Group(
-                1,
+                "a045A00001PR7KDQA1",
                 "Sparta",
-                "Os matadores de sparta",
-                membersA
+                "Os matadores de sparta"
         ));
         groupsList.add(new Group(
-                1,
+                "a045A00001PR7KDQA1",
                 "Atenas",
-                "Os matadores de atenas",
-                membersA
+                "Os matadores de atenas"
         ));
         groupsList.add(new Group(
-                1,
+                "a045A00001PR7KDQA1",
                 "Brazil",
-                "Os matadores de brasil",
-                membersA
-
+                "Os matadores de brasil"
         ));
 
         View view = inflater.inflate(R.layout.fragment_group, container, false);
 
         listview = view.findViewById(R.id.group_listview);
-        btnFloatingRegister = view.findViewById(R.id.group_floating_register);
 
         adapter = new GroupAdapater(getActivity(), groupsList);
         listview.setAdapter(adapter);
@@ -131,15 +96,15 @@ public class GroupFragment extends Fragment {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(), "Position: " + position, Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getActivity(), GroupDetailActivity.class);
 
                 // recupera dados a serem passados
                 Group group = groupsList.get(position);
 
+                Toast.makeText(getActivity(), "ID: " + group.getId(), Toast.LENGTH_LONG).show();
+
                 // Enviando dados para conversa activity
-                intent.putExtra("name", group.getName());
-                intent.putExtra("description", group.getDescription());
+                intent.putExtra("id", group.getId());
 
                 startActivity(intent);
             }
@@ -173,22 +138,9 @@ public class GroupFragment extends Fragment {
         btnAddRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<User> meGroup = new ArrayList<User>();
-                meGroup.add(new User(
-                        2,
-                        "Eu",
-                        "eu@eu.com",
-                        "eu",
-                        "Rua eu, 100",
-                        "euzinho",
-                        "eulandia",
-                        "EU"
-                ));
-
                 AddGroup(
                         name.getText().toString(),
-                        description.getText().toString(),
-                        meGroup
+                        description.getText().toString()
                 );
 
                 dialog.dismiss();
@@ -206,16 +158,18 @@ public class GroupFragment extends Fragment {
         dialog.show();
     }
 
-    public void AddGroup(String name, String description, ArrayList<User> members) {
-        Random rand = new Random();
-
-        groupsList.add( new Group(rand.nextInt(100) + 5, name, description, members) );
+    public void AddGroup(String name, String description) {
+        groupsList.add( new Group("a045A00001PR7KDQA1", name, description) );
         adapter.notifyDataSetChanged();
     }
 
     private void getGroupsList() {
         adapter = new GroupAdapater(getContext(), groupsList);
         listview.setAdapter(adapter);
+    }
+
+    private void fetchData() {
+        String url = this.buildUrl();
     }
 
     private String buildUrl() {
@@ -225,30 +179,5 @@ public class GroupFragment extends Fragment {
         String redirectUrl = "myapp:///sportize/api/auth//success";
 
         return String.format(url, responseType, clientId, redirectUrl);
-    }
-
-    private void fetchData() {
-        String url = this.buildUrl();
-        OkHttpClient client = new OkHttpClient();
-
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d("==> IOException", e + "\n\n");
-                call.cancel();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-
-                final String myResponse = response.body().string();
-
-                Log.d("==> RESPONSE", myResponse + "\n\n");
-            }
-        });
     }
 }

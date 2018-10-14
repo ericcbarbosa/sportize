@@ -3,23 +3,23 @@ package br.com.sportize.app.model;
 import java.util.ArrayList;
 
 public class Group {
-    private int id;
+    private String id;
     private String name;
     private String description;
-    private ArrayList<User> members;
+//    private ArrayList<User> members;
 
-    public Group(int id, String name, String description, ArrayList<User> members) {
+    public Group(String id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.members = members;
+//        this.members = members;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -39,13 +39,13 @@ public class Group {
         this.description = description;
     }
 
-    public ArrayList<User> getMembers() {
-        return members;
-    }
-
-    public void setMembers(ArrayList<User> members) {
-        this.members = members;
-    }
+//    public ArrayList<User> getMembers() {
+//        return members;
+//    }
+//
+//    public void setMembers(ArrayList<User> members) {
+//        this.members = members;
+//    }
 
     @Override
     public String toString() {
@@ -53,7 +53,6 @@ public class Group {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", members=" + members +
                 '}';
     }
 }

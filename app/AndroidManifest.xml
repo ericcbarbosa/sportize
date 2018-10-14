@@ -6,19 +6,39 @@
 	android:versionName="1.0"
 	android:installLocation="internalOnly">
 
-	<application android:icon="@drawable/sf__icon"
+	<application
+		android:icon="@mipmap/ic_launcher"
 	    android:label="@string/app_name"
+		android:roundIcon="@mipmap/ic_launcher_round"
 		android:name=".MainApplication"
+		android:theme="@style/AppTheme"
 		android:manageSpaceActivity="com.salesforce.androidsdk.ui.ManageSpaceActivity">
 
 		<!-- Launcher screen -->
 		<activity android:name=".MainActivity"
 		    android:label="@string/app_name"
-			android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+			android:theme="@style/AppTheme.NoActionBar">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
+		</activity>
+
+		<activity
+			android:name=".LoginActivity"
+			android:label="@string/app_name"
+			android:theme="@style/AppTheme.NoActionBar" />
+
+		<activity android:name=".RegisterActivity" />
+
+		<activity
+			android:name=".GroupDetailActivity"
+			android:theme="@style/AppTheme.NoActionBar"
+			android:parentActivityName=".MainActivity">
+
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value=".MainActivity" />
 		</activity>
 
         <!-- Login activity -->
@@ -96,4 +116,8 @@
         android:protectionLevel="signature" />
 
     <uses-permission android:name="br.com.sportize.app.C2D_MESSAGE" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+	<uses-permission android:name="android.permission.READ_PROFILE" />
+	<uses-permission android:name="android.permission.READ_CONTACTS" />
 </manifest>

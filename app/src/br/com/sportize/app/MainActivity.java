@@ -26,8 +26,10 @@
  */
 package br.com.sportize.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -45,14 +47,18 @@ import org.json.JSONArray;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+import br.com.sportize.app.adapter.GroupAdapater;
+import br.com.sportize.app.model.Group;
+
 /**
  * Main activity
  */
 public class MainActivity extends SalesforceActivity {
 
     private RestClient client;
-    private ArrayAdapter<String> listAdapter;
-	
+    private ArrayAdapter<Group> listAdapter;
+    private ArrayList<Group> groupList;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,45 +66,69 @@ public class MainActivity extends SalesforceActivity {
 		// Setup view
 		setContentView(R.layout.main);
 	}
-	
-	@Override 
+
+	@Override
 	public void onResume() {
 		// Hide everything until we are logged in
 		findViewById(R.id.root).setVisibility(View.INVISIBLE);
 
-		// TODO: Trocar para o adapter do User
-		listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
-		((ListView) findViewById(R.id.contacts_list)).setAdapter(listAdapter);				
-		
+		groupList = new ArrayList<>();
+		listAdapter = new GroupAdapater(MainActivity.this, groupList);
+
+		ListView listView = findViewById(R.id.contacts_list);
+		listView.setAdapter(listAdapter);
+
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Group group = groupList.get(position);
+
+				Intent intent = new Intent(MainActivity.this, GroupDetailActivity.class);
+				intent.putExtra("id", group.getId());
+				intent.putExtra("name", group.getName());
+				intent.putExtra("description", group.getDescription());
+
+				startActivity(intent);
+			}
+		});
+
 		super.onResume();
-	}		
-	
+	}
+
 	@Override
 	public void onResume(RestClient client) {
         // Keeping reference to rest client
-        this.client = client; 
+        this.client = client;
 
 		// Show everything
 		findViewById(R.id.root).setVisibility(View.VISIBLE);
+
+		// Get Groups
+		try {
+			sendRequest("SELECT Id, Name, group_description__c FROM group__c\t");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			Toast.makeText(MainActivity.this, "Não foi possível baixar a lista de Grupos: \n"+e.getMessage(), Toast.LENGTH_LONG).show();
+		}
 	}
 
 	/**
-	 * Called when "Logout" button is clicked. 
-	 * 
+	 * Called when "Logout" button is clicked.
+	 *
 	 * @param v
 	 */
 	public void onLogoutClick(View v) {
 		SalesforceSDKManager.getInstance().logout(this);
 	}
-	
+
 	/**
-	 * Called when "Clear" button is clicked. 
-	 * 
+	 * Called when "Clear" button is clicked.
+	 *
 	 * @param v
 	 */
 	public void onClearClick(View v) {
 		listAdapter.clear();
-	}	
+	}
 
 	// TODO: Buscar os dados completos do User
 	public void onFetchUsersClick(View v) throws UnsupportedEncodingException {
@@ -112,19 +142,19 @@ public class MainActivity extends SalesforceActivity {
 	 * @throws UnsupportedEncodingException
 	 */
 	public void onFetchContactsClick(View v) throws UnsupportedEncodingException {
-        sendRequest("SELECT Name FROM player__c\t");
+        sendRequest("SELECT Id, Name, group_description__c FROM group__c\t");
 	}
 
 	/**
 	 * Called when "Fetch Accounts" button is clicked
-	 * 
+	 *
 	 * @param v
-	 * @throws UnsupportedEncodingException 
+	 * @throws UnsupportedEncodingException
 	 */
 	public void onFetchAccountsClick(View v) throws UnsupportedEncodingException {
-		sendRequest("SELECT Name FROM Account");
-	}	
-	
+//		sendRequest("SELECT Name FROM Account");
+	}
+
 	private void sendRequest(String soql) throws UnsupportedEncodingException {
 		RestRequest restRequest = RestRequest.getRequestForQuery(ApiVersionStrings.getVersionNumber(this), soql);
 
@@ -143,7 +173,12 @@ public class MainActivity extends SalesforceActivity {
 							for (int i = 0; i < records.length(); i++) {
 
 								// TODO: Passar um User para o adapter
-								listAdapter.add(records.getJSONObject(i).getString("Name"));
+								String groupId = records.getJSONObject(i).getString("Id");
+								String groupName = records.getJSONObject(i).getString("Name");
+								String groupDescription = records.getJSONObject(i).getString("group_description__c");
+
+								Group g = new Group(groupId, groupName, groupDescription);
+								groupList.add(g);
 							}
 						} catch (Exception e) {
 							onError(e);
@@ -151,7 +186,7 @@ public class MainActivity extends SalesforceActivity {
 					}
 				});
 			}
-			
+
 			@Override
 			public void onError(final Exception exception) {
 				runOnUiThread(new Runnable() {
