@@ -44,8 +44,6 @@ public class GroupAdapater extends ArrayAdapter<Group> {
 
             Group group = groupsList.get(position);
 
-            Log.d("group: ", group.toString());
-
             groupName.setText(group.getName());
             groupDescription.setText(group.getDescription());
         }

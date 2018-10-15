@@ -134,6 +134,9 @@ public class MainActivity extends SalesforceActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_user) {
+            Intent intent = new Intent(MainActivity.this, UsersActivity.class);
+
+            startActivity(intent);
 
         } else if (id == R.id.nav_groups) {
             Intent intent = new Intent(MainActivity.this, GroupsActivity.class);

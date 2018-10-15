@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -13,73 +15,54 @@ import java.util.ArrayList;
 import br.com.sportize.app.MyLongClickListener;
 import br.com.sportize.app.R;
 import br.com.sportize.app.fragment.UserFragment;
+import br.com.sportize.app.model.Group;
 import br.com.sportize.app.model.User;
 import br.com.sportize.app.viewholder.UserViewHolder;
 
-public class UserAdapter extends RecyclerView.Adapter<UserViewHolder>{
+public class UserAdapter extends ArrayAdapter<User>  {
     private Context context;
     private ArrayList<User> userList;
-    int selectedPos;
-    UserFragment fragment;
 
     public UserAdapter(Context context, ArrayList<User> userList) {
+        super(context, 0, userList);
         this.context = context;
         this.userList = userList;
     }
 
     @NonNull
     @Override
-    public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.user_item, parent, false);
-        UserViewHolder vh = new UserViewHolder(v);
+    public View getView(int position, View convertView, ViewGroup parent) {
 
-        return vh;
-    }
+        View view = null;
 
-    @Override
-    public void onBindViewHolder(@NonNull final UserViewHolder holder, int position) {
-        User user = userList.get(position);
+        // Verifica se a lista está vazia
+        if (userList != null) {
+            // inicializar objeto para montagem da view
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 
-        holder.name.setText( user.getName() );
-        holder.email.setText( user.getName() );
-        holder.address.setText( user.getAddress() );
-        holder.neighbor.setText( user.getNeighborhood() );
-        holder.city.setText( user.getCity() );
-        holder.state.setText( user.getState() );
+            // Monta view a partir do xml
+            view = inflater.inflate(R.layout.user_item, parent, false);
 
-        holder.btnRemover.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int pos = holder.getAdapterPosition();
+            // recupera elemento para exibição
+            TextView txtName = view.findViewById(R.id.user_out_name);
+            TextView txtEmail = view.findViewById(R.id.user_out_email);
+//            TextView txtState = view.findViewById(R.id.user_out_state);
+//            TextView txtCity = view.findViewById(R.id.user_out_city);
+//            TextView txtNeighboor = view.findViewById(R.id.user_out_neighboor);
+//            TextView txtAddress = view.findViewById(R.id.user_out_address);
+//            TextView txtPass = view.findViewById(R.id.user_out_password);
 
-                if (pos != RecyclerView.NO_POSITION) {
-                    deleteItem(pos);
-                }
-            }
-        });
+            User user = userList.get(position);
 
-        holder.setLongClickListener(new MyLongClickListener() {
-            @Override
-            public void onLongClick(int pos) {
-                selectedPos = pos;
-            }
-        });
-    }
-
-    @Override
-    public int getItemCount() {
-        return userList != null? userList.size() : 0;
-    }
-
-    public void deleteItem(int position) {
-        User user = userList.get(position);
-
-        if(userList.remove(user)) {
-            Toast.makeText(context,"O usuário " + user.getName() + " foi removido com sucesso", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context,"Não foi possível remover o usuário" + user.getName(), Toast.LENGTH_SHORT).show();
+            txtName.setText(user.getName());
+            txtEmail.setText(user.getEmail());
+//            txtState.setText(user.getState());
+//            txtCity.setText(user.getCity());
+//            txtNeighboor.setText(user.getNeighborhood());
+//            txtAddress.setText(user.getAddress());
+//            txtPass.setText(user.getPassword());
         }
 
-        this.notifyItemRemoved(position);
+        return view;
     }
 }

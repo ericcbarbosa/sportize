@@ -36,6 +36,7 @@ import android.support.v7.app.AppCompatCallback;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -53,26 +54,31 @@ import com.salesforce.androidsdk.rest.RestResponse;
 import com.salesforce.androidsdk.ui.SalesforceActivity;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.com.sportize.app.adapter.GroupAdapater;
-import br.com.sportize.app.model.Group;
+import br.com.sportize.app.adapter.UserAdapter;
+import br.com.sportize.app.model.User;
 
-public class GroupsActivity extends SalesforceActivity implements AppCompatCallback {
+public class UsersActivity extends SalesforceActivity implements AppCompatCallback {
     private RestClient client;
-    private FloatingActionButton btnAddGroup;
-    private ArrayAdapter<Group> listAdapter;
-    private ArrayList<Group> groupList;
+    private ArrayAdapter<User> listAdapter;
+    private ArrayList<User> userList;
     private AppCompatDelegate delegate;
 
     View view;
 
-    private EditText name;
-    private EditText description;
+    private EditText txtName;
+    private EditText txtPassword;
+    private EditText txtEmail;
+    private EditText txtAddress;
+    private EditText txtNeighbor;
+    private EditText txtCity;
+    private EditText txtState;
 
     private Button btnCancel;
     private Button btnAddRegister;
@@ -82,17 +88,17 @@ public class GroupsActivity extends SalesforceActivity implements AppCompatCallb
 		super.onCreate(savedInstanceState);
 
 		// Setup view
-		setContentView(R.layout.group_main);
+		setContentView(R.layout.user_main);
 
         // Delegate
         delegate = AppCompatDelegate.create(this, this);
         delegate.onCreate(savedInstanceState);
-        delegate.setContentView(R.layout.group_main);
+        delegate.setContentView(R.layout.user_main);
 
         // Configura toolbar
-        Toolbar toolbar = findViewById(R.id.home_toolbar);
+        Toolbar toolbar = findViewById(R.id.user_home_toolbar);
 
-        toolbar.setTitle("Grupos");
+        toolbar.setTitle("Jogadores");
         toolbar.setNavigationIcon(R.drawable.ic_action_arrow_left);
 
         delegate.setSupportActionBar(toolbar);
@@ -105,8 +111,9 @@ public class GroupsActivity extends SalesforceActivity implements AppCompatCallb
             }
         });
 
-        btnAddGroup = findViewById(R.id.group_fab_add);
-        btnAddGroup.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton btnAddUser = findViewById(R.id.user_fab_add);
+
+        btnAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 displayDialog();
@@ -119,22 +126,27 @@ public class GroupsActivity extends SalesforceActivity implements AppCompatCallb
 		// Hide everything until we are logged in
 		findViewById(R.id.root).setVisibility(View.INVISIBLE);
 
-		groupList = new ArrayList<>();
-		listAdapter = new GroupAdapater(GroupsActivity.this, groupList);
+		userList = new ArrayList<User>();
+		listAdapter = new UserAdapter(UsersActivity.this, userList);
 
-		ListView listView = findViewById(R.id.contacts_list);
+		ListView listView = findViewById(R.id.users_list);
 		listView.setAdapter(listAdapter);
 
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Group group = groupList.get(position);
+				User user = userList.get(position);
 
-				Intent intent = new Intent(GroupsActivity.this, GroupDetailActivity.class);
+				Intent intent = new Intent(UsersActivity.this, UserDetailActivity.class);
 
-				intent.putExtra("id", group.getId());
-				intent.putExtra("name", group.getName());
-				intent.putExtra("description", group.getDescription());
+				intent.putExtra("id", user.getId());
+				intent.putExtra("name", user.getName());
+				intent.putExtra("email", user.getEmail());
+				intent.putExtra("password", user.getPassword());
+                intent.putExtra("address", user.getAddress());
+                intent.putExtra("neighborhood", user.getNeighborhood());
+				intent.putExtra("city", user.getCity());
+				intent.putExtra("state", user.getState());
 
 				startActivity(intent);
 			}
@@ -151,39 +163,49 @@ public class GroupsActivity extends SalesforceActivity implements AppCompatCallb
 		// Show everything
 		findViewById(R.id.root).setVisibility(View.VISIBLE);
 
-		// Get Groups
-        tryToLoadGroups();
+		// Get users
+        tryToLoadUsers();
 	}
 
 
     // DIALOG
     public void displayDialog() {
-        final Dialog dialog = new Dialog(GroupsActivity.this);
+        final Dialog dialog = new Dialog(UsersActivity.this);
 
         dialog.setTitle("Cadastrar Grupo");
-        dialog.setContentView(R.layout.group_register);
+        dialog.setContentView(R.layout.user_register);
         dialog.setCancelable(false);
 
-        name = dialog.findViewById(R.id.group_register_name);
-        description = dialog.findViewById(R.id.group_register_description);
+        txtName = dialog.findViewById(R.id.user_register_name);
+        txtEmail = dialog.findViewById(R.id.user_register_email);
+        txtPassword = dialog.findViewById(R.id.user_register_password);
+        txtAddress = dialog.findViewById(R.id.user_register_address);
+        txtNeighbor = dialog.findViewById(R.id.user_register_neighbor);
+        txtCity = dialog.findViewById(R.id.user_register_city);
+        txtState = dialog.findViewById(R.id.user_register_state);
 
         btnAddRegister = dialog.findViewById(R.id.user_register_btn_add);
-        btnCancel = dialog.findViewById(R.id.group_register_btn_cancel);
+        btnCancel = dialog.findViewById(R.id.user_register_btn_cancel);
 
         btnAddRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Map<String, Object> fields = new HashMap<String, Object>();
 
-                if (name.getText().toString() != null && description.getText().toString() != null) {
-                    fields.put("Name", name.getText().toString());
-                    fields.put("group_description__c", description.getText().toString());
+                if (txtName.getText().toString() != null && txtEmail.getText().toString() != null) {
+                    fields.put("Name", txtName.getText().toString());
+                    fields.put("email__c", txtEmail.getText().toString());
+                    fields.put("password__c", txtPassword.getText().toString());
+                    fields.put("address__c", txtAddress.getText().toString());
+                    fields.put("neighborhood__c", txtNeighbor.getText().toString());
+                    fields.put("city__c", txtCity.getText().toString());
+                    fields.put("state__c", txtState.getText().toString());
 
-                    tryToAddNewGroup(fields);
+                    tryToAddNewUser(fields);
 
                     dialog.dismiss();
                 } else {
-                    Toast.makeText(GroupsActivity.this, "Informe os dados do grupo para cadastrar.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UsersActivity.this, "Informe os dados do jogador para cadastrar.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -198,7 +220,7 @@ public class GroupsActivity extends SalesforceActivity implements AppCompatCallb
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                tryToLoadGroups();
+//                tryToLoadUsers();
             }
         });
 
@@ -206,18 +228,18 @@ public class GroupsActivity extends SalesforceActivity implements AppCompatCallb
     }
 
     // API REQUESTS
-    private void tryToLoadGroups() {
+    private void tryToLoadUsers() {
         try {
-            loadGroups();
+            loadUsers();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
 
-    private void loadGroups() throws UnsupportedEncodingException {
+    private void loadUsers() throws UnsupportedEncodingException {
         RestRequest restRequest = RestRequest.getRequestForQuery(
                 ApiVersionStrings.getVersionNumber(this),
-                "SELECT Id, Name, group_description__c FROM group__c\t"
+                "SELECT Id, Name, email__c, password__c, state__c, city__c, address__c, neighborhood__c FROM player__c\t"
         );
 
         client.sendAsync(restRequest, new AsyncRequestCallback() {
@@ -234,13 +256,20 @@ public class GroupsActivity extends SalesforceActivity implements AppCompatCallb
                             // TODO: Extrair dados do JSON e transformar em User
                             for (int i = 0; i < records.length(); i++) {
 
-                                // TODO: Passar um User para o adapter
-                                String groupId = records.getJSONObject(i).getString("Id");
-                                String groupName = records.getJSONObject(i).getString("Name");
-                                String groupDescription = records.getJSONObject(i).getString("group_description__c");
+                                JSONObject record = records.getJSONObject(i);
 
-                                Group g = new Group(groupId, groupName, groupDescription);
-                                groupList.add(g);
+                                User user = new User(
+                                        record.getString("Id"),
+                                        record.getString("Name"),
+                                        record.getString("email__c"),
+                                        record.getString("password__c"),
+                                        record.getString("address__c"),
+                                        record.getString("neighborhood__c"),
+                                        record.getString("city__c"),
+                                        record.getString("state__c")
+                                );
+
+                                userList.add(user);
                             }
                         } catch (Exception e) {
                             onError(e);
@@ -254,30 +283,32 @@ public class GroupsActivity extends SalesforceActivity implements AppCompatCallb
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(GroupsActivity.this,
-                                GroupsActivity.this.getString(
+                        Toast.makeText(UsersActivity.this,
+                                UsersActivity.this.getString(
                                         SalesforceSDKManager.getInstance().getSalesforceR().stringGenericError(),
                                         exception.toString()
                                 ),
                                 Toast.LENGTH_LONG).show();
+
+                        Log.i("==> LoadUser:", exception.toString());
                     }
                 });
             }
         });
     }
 
-    private void tryToAddNewGroup(Map<String, Object> fields) {
+    private void tryToAddNewUser(Map<String, Object> fields) {
         try {
-            addNewGroup(fields);
+            addNewUser(fields);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
 
-    private void addNewGroup(Map<String, Object> fields) throws UnsupportedEncodingException {
+    private void addNewUser(Map<String, Object> fields) throws UnsupportedEncodingException {
         RestRequest restRequest = RestRequest.getRequestForCreate(
                 ApiVersionStrings.getVersionNumber(this),
-                "group__c",
+                "player__c",
                 fields
         );
 
@@ -289,7 +320,7 @@ public class GroupsActivity extends SalesforceActivity implements AppCompatCallb
                     @Override
                     public void run() {
                         listAdapter.clear();
-                        tryToLoadGroups();
+                        tryToLoadUsers();
                     }
                 });
             }
@@ -299,8 +330,8 @@ public class GroupsActivity extends SalesforceActivity implements AppCompatCallb
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(GroupsActivity.this,
-                                GroupsActivity.this.getString(
+                        Toast.makeText(UsersActivity.this,
+                                UsersActivity.this.getString(
                                         SalesforceSDKManager.getInstance().getSalesforceR().stringGenericError(),
                                         exception.toString()
                                 ),
@@ -311,10 +342,7 @@ public class GroupsActivity extends SalesforceActivity implements AppCompatCallb
         });
     }
 
-	public void onLogoutClick(View v) {
-		SalesforceSDKManager.getInstance().logout(this);
-	}
-
+    // OVERRIDES
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {}
 

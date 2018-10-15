@@ -18,13 +18,13 @@ public class UserViewHolder extends RecyclerView.ViewHolder implements View.OnLo
 
     public UserViewHolder(View itemView) {
         super(itemView);
-        name = (TextView) itemView.findViewById(R.id.user_out_name);
-        email = (TextView) itemView.findViewById(R.id.user_out_email);
-        address = (TextView) itemView.findViewById(R.id.user_out_address);
-        neighbor = (TextView) itemView.findViewById(R.id.user_out_neighboor);
-        city = (TextView) itemView.findViewById(R.id.user_out_city);
-        state = (TextView) itemView.findViewById(R.id.user_out_state);
-        btnRemover = itemView.findViewById(R.id.user_btn_remove);
+//        name = (TextView) itemView.findViewById(R.id.user_out_name);
+//        email = (TextView) itemView.findViewById(R.id.user_out_email);
+//        address = (TextView) itemView.findViewById(R.id.user_out_address);
+//        neighbor = (TextView) itemView.findViewById(R.id.user_out_neighboor);
+//        city = (TextView) itemView.findViewById(R.id.user_out_city);
+//        state = (TextView) itemView.findViewById(R.id.user_out_state);
+//        btnRemover = itemView.findViewById(R.id.user_btn_remove);
 
         itemView.setOnLongClickListener(this);
         itemView.setOnCreateContextMenuListener(this);

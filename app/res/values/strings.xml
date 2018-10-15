@@ -45,7 +45,7 @@
 
     <!-- User : Titles & Page Descriptions -->
     <string name="user_title_add">Cadastrar usuário</string>
-    <string name="user_title_edit">Editar dados do usuário</string>
+    <string name="user_title_edit">Editar usuário</string>
     <string name="user_Description_add">Preencha os dados abaixo para adicionar um novo usuário</string>
     <string name="user_Description_edit">Altere os dados abaixo e clique no botão salvar para alterar os dados do usuário</string>
 

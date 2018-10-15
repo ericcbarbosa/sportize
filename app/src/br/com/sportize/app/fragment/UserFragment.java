@@ -64,50 +64,50 @@ public class UserFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
         btnFloatingRegister = myView.findViewById(R.id.user_floating_register);
-        recycler = myView.findViewById(R.id.user_recycler);
-        recycler.setLayoutManager(linearLayoutManager);
+//        recycler = myView.findViewById(R.id.user_recycler);
+//        recycler.setLayoutManager(linearLayoutManager);
 
         usersList = new ArrayList<User>();
-        usersList.add(new User(
-                1,
-                "Eric",
-                "eric@fiap.com.br",
-                "123",
-                "rua jaime de oliveira, 60",
-                "Portal dos Gramados",
-                "Guarulhos",
-                "SP"
-        ));
-        usersList.add(new User(
-                2,
-                "João",
-                "joao@fiap.com.br",
-                "123",
-                "rua Dr Amancio de Carvalho, 182",
-                "Vila Mariana",
-                "São Paulo",
-                "SP"
-        ));
-        usersList.add(new User(
-                3,
-                "Mariana",
-                "mariana@fiap.com.br",
-                "123",
-                "Av Lins, 1000",
-                "Vila Mariana",
-                "São Paulo",
-                "SP"
-        ));
+//        usersList.add(new User(
+//                1,
+//                "Eric",
+//                "eric@fiap.com.br",
+//                "123",
+//                "rua jaime de oliveira, 60",
+//                "Portal dos Gramados",
+//                "Guarulhos",
+//                "SP"
+//        ));
+//        usersList.add(new User(
+//                2,
+//                "João",
+//                "joao@fiap.com.br",
+//                "123",
+//                "rua Dr Amancio de Carvalho, 182",
+//                "Vila Mariana",
+//                "São Paulo",
+//                "SP"
+//        ));
+//        usersList.add(new User(
+//                3,
+//                "Mariana",
+//                "mariana@fiap.com.br",
+//                "123",
+//                "Av Lins, 1000",
+//                "Vila Mariana",
+//                "São Paulo",
+//                "SP"
+//        ));
 
-        adapter = new UserAdapter(getActivity(), usersList);
-        recycler.setAdapter(adapter);
-
-        btnFloatingRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayDialog();
-            }
-        });
+//        adapter = new UserAdapter(getActivity(), usersList);
+//        recycler.setAdapter(adapter);
+//
+//        btnFloatingRegister.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                displayDialog();
+//            }
+//        });
 
         return myView;
     }
@@ -161,12 +161,12 @@ public class UserFragment extends Fragment {
     public void AddUser(String name, String email, String password, String address, String neighborhood, String city, String state) {
         Random rand = new Random();
 
-        usersList.add( new User(rand.nextInt(100) + 5, name, email, password, address, neighborhood, city, state) );
+//        usersList.add( new User(rand.nextInt(100) + 5, name, email, password, address, neighborhood, city, state) );
         adapter.notifyDataSetChanged();
     }
 
     private void getUsersList() {
         adapter = new UserAdapter(getContext(), usersList);
-        recycler.setAdapter(adapter);
+//        recycler.setAdapter(adapter);
     }
 }

@@ -3,17 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:minHeight="201dp"
     tools:layout_editor_absoluteY="81dp">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:orientation="vertical"
             app:layout_constraintTop_toTopOf="parent">
@@ -22,10 +25,9 @@
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:text="@string/user_title_add"
-                android:textColor="@color/colorSuccess"
-                android:textSize="18sp"
+                android:textColor="@color/colorAccent"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:layout_editor_absoluteY="16dp" />
@@ -34,8 +36,6 @@
                 android:id="@+id/user_register_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
                 android:ems="10"
                 android:hint="@string/user_out_name"
                 android:inputType="textCapWords"
@@ -47,8 +47,6 @@
                 android:id="@+id/user_register_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
                 android:ems="10"
                 android:hint="@string/user_out_password"
                 android:inputType="textPassword"
@@ -60,8 +58,6 @@
                 android:id="@+id/user_register_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
                 android:ems="10"
                 android:hint="@string/user_out_email"
                 android:inputType="textEmailAddress"
@@ -73,8 +69,6 @@
                 android:id="@+id/user_register_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
                 android:ems="10"
                 android:hint="@string/user_out_address"
                 android:inputType="textCapWords"
@@ -86,8 +80,6 @@
                 android:id="@+id/user_register_neighbor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
                 android:ems="10"
                 android:hint="@string/user_out_neighbor"
                 android:inputType="textCapWords"
@@ -99,8 +91,6 @@
                 android:id="@+id/user_register_city"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
                 android:ems="10"
                 android:hint="@string/user_out_city"
                 android:inputType="textCapWords"
@@ -112,8 +102,6 @@
                 android:id="@+id/user_register_state"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
                 android:ems="10"
                 android:hint="@string/user_out_state"
                 android:inputType="textCapWords"
@@ -121,54 +109,49 @@
                 app:layout_constraintStart_toStartOf="parent"
                 tools:layout_editor_absoluteY="55dp" />
 
-            <android.support.constraint.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <LinearLayout
-                    android:layout_width="0dp"
+                <Button
+                    android:id="@+id/user_register_btn_cancel"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:orientation="horizontal"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:background="@color/colorLight"
+                    android:text="@string/user_cancel"
+                    android:textColor="@color/colorDark"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintStart_toStartOf="parent" />
 
-                    <Button
-                        android:id="@+id/user_register_btn_cancel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="32dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_weight="1"
-                        android:background="@color/colorLight"
-                        android:text="@string/user_cancel"
-                        android:textColor="@color/colorDark"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                    <Button
-                        android:id="@+id/user_register_btn_add"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="32dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_weight="1"
-                        android:background="@color/colorSuccess"
-                        android:text="@string/user_add"
-                        android:textColor="@color/colorSuccessInvert"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-                </LinearLayout>
-            </android.support.constraint.ConstraintLayout>
+                <Button
+                    android:id="@+id/user_register_btn_add"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:background="@color/colorSuccess"
+                    android:text="@string/user_add"
+                    android:textColor="@color/colorSuccessInvert"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

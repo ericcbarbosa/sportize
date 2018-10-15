@@ -40,6 +40,22 @@
 				android:value=".GroupsActivity" />
 		</activity>
 
+		<!-- JOGADORES -->
+		<activity
+			android:name=".UsersActivity"
+			android:label="@string/group_label"
+			android:theme="@style/AppTheme.NoActionBar" />
+
+		<activity
+			android:name=".UserDetailActivity"
+			android:theme="@style/AppTheme.NoActionBar"
+			android:parentActivityName=".UsersActivity">
+
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value=".UsersActivity" />
+		</activity>
+
 		<!--<activity-->
 			<!--android:name=".LoginActivity"-->
 			<!--android:label="@string/app_name"-->

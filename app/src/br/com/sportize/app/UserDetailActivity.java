@@ -1,7 +1,5 @@
 package br.com.sportize.app;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatCallback;
@@ -9,8 +7,6 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,28 +18,31 @@ import com.salesforce.androidsdk.rest.RestRequest;
 import com.salesforce.androidsdk.rest.RestResponse;
 import com.salesforce.androidsdk.ui.SalesforceActivity;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
 import br.com.sportize.app.model.Group;
+import br.com.sportize.app.model.User;
 
-public class GroupDetailActivity extends SalesforceActivity implements AppCompatCallback {
+public class UserDetailActivity extends SalesforceActivity implements AppCompatCallback {
 
     private RestClient client;
     private AppCompatDelegate delegate;
 
     // Extras: dados do grupo
-    private Group group;
+    private User user;
 
     // View
-    EditText name;
-    EditText description;
-    Button btnUpdate;
+    EditText editName;
+    EditText editEmail;
+    EditText editPassword;
+    EditText editAddress;
+    EditText editCity;
+    EditText editState;
+    EditText editNeighborhood;
+
     Button btnRemove;
+    Button btnUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +51,12 @@ public class GroupDetailActivity extends SalesforceActivity implements AppCompat
         // Delegate
         delegate = AppCompatDelegate.create(this, this);
         delegate.onCreate(savedInstanceState);
-        delegate.setContentView(R.layout.activity_group_detail);
+        delegate.setContentView(R.layout.activity_user_detail);
 
         // Configura toolbar
-        Toolbar toolbar = findViewById(R.id.group_detail_toolbar);
+        Toolbar toolbar = findViewById(R.id.user_detail_toolbar);
 
-        toolbar.setTitle("Detalhes do Grupo");
+        toolbar.setTitle("Detalhes do Jogador");
         toolbar.setNavigationIcon(R.drawable.ic_action_arrow_left);
 
         delegate.setSupportActionBar(toolbar);
@@ -74,24 +73,40 @@ public class GroupDetailActivity extends SalesforceActivity implements AppCompat
     }
 
     private void setContent() {
-        name = findViewById(R.id.group_detail_edit_name);
-        description = findViewById(R.id.group_detail_edit_description);
-        btnUpdate = findViewById(R.id.group_detail_edit_update);
-        btnRemove = findViewById(R.id.group_detail_edit_remove);
+        editName = findViewById(R.id.user_detail_name);
+        editEmail = findViewById(R.id.user_detail_email);
+        editPassword = findViewById(R.id.user_detail_password);
+        editState = findViewById(R.id.user_detail_state);
+        editCity = findViewById(R.id.user_detail_city);
+        editNeighborhood = findViewById(R.id.user_detail_neighbor);
+        editAddress = findViewById(R.id.user_detail_address);
+
+        btnUpdate = findViewById(R.id.user_detail_btn_update);
+        btnRemove = findViewById(R.id.user_detail_btn_remove);
 
         // Extras
         Bundle extra = getIntent().getExtras();
 
         if (extra != null) {
-            group = new Group(
+            user = new User(
                     extra.getString("id"),
                     extra.getString("name"),
-                    extra.getString("description")
+                    extra.getString("email"),
+                    extra.getString("password"),
+                    extra.getString("address"),
+                    extra.getString("neighborhood"),
+                    extra.getString("city"),
+                    extra.getString("state")
             );
         }
 
-        name.setText(group.getName());
-        description.setText(group.getDescription());
+        editName.setText(user.getName());
+        editEmail.setText(user.getEmail());
+        editPassword.setText(user.getPassword());
+        editState.setText(user.getState());
+        editCity.setText(user.getCity());
+        editNeighborhood.setText(user.getNeighborhood());
+        editAddress.setText(user.getAddress());
 
         // Listeners
         btnUpdate.setOnClickListener(new View.OnClickListener() {
@@ -99,31 +114,36 @@ public class GroupDetailActivity extends SalesforceActivity implements AppCompat
             public void onClick(View v) {
                 Map<String, Object> fields = new HashMap<String, Object>();
 
-                fields.put("Name", name.getText().toString());
-                fields.put("group_description__c", description.getText().toString());
+                fields.put("Name", editName.getText().toString());
+                fields.put("email__c", editEmail.getText().toString());
+                fields.put("password__c", editPassword.getText().toString());
+                fields.put("state__c", editState.getText().toString());
+                fields.put("city__c", editCity.getText().toString());
+                fields.put("neighborhood__c", editNeighborhood.getText().toString());
+                fields.put("address__c", editAddress.getText().toString());
 
-                saveGroup(group.getId(), fields);
+                saveUser(user.getId(), fields);
             }
         });
 
         btnRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeGroup(group);
+                removeUser(user);
             }
         });
     }
 
-    private void saveGroup(String id, final Map<String, Object> fields)  {
+    private void saveUser(String id, final Map<String, Object> fields)  {
         RestRequest restRequest;
 
         try {
             restRequest = RestRequest.getRequestForUpdate(
                     getString(R.string.api_version),
-                    "group__c", id, fields
+                    "player__c", id, fields
             );
         } catch (Exception e) {
-            Log.d("==> saveGroup: ", e.getMessage());
+            Log.d("==> saveUser: ", e.getMessage());
             return;
         }
 
@@ -143,12 +163,12 @@ public class GroupDetailActivity extends SalesforceActivity implements AppCompat
                         // whether the REST request itself succeeded.
                         if (result.isSuccess()) {
                             try {
-                                String message = String.format("Dados do grupo \"%s\" atualizados com sucesso!", fields.get("Name"));
+                                String message = String.format("Dados do jogador \"%s\" atualizados com sucesso!", fields.get("Name"));
 
-                                Toast.makeText(GroupDetailActivity.this, message, Toast.LENGTH_SHORT).show();
-                                GroupDetailActivity.this.finish();
+                                Toast.makeText(UserDetailActivity.this, message, Toast.LENGTH_SHORT).show();
+                                UserDetailActivity.this.finish();
                             } catch (Exception e) {
-                                Toast.makeText(GroupDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UserDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                 Log.d("==> sendAsync: ", e.getMessage());
                             }
                         }
@@ -158,23 +178,23 @@ public class GroupDetailActivity extends SalesforceActivity implements AppCompat
 
             @Override
             public void onError(Exception e) {
-                Toast.makeText(GroupDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.d("==> onError: ", e.getMessage());
             }
         });
     }
 
-    private void removeGroup(final Group group) {
+    private void removeUser(final User user) {
         RestRequest restRequest;
 
         try {
             restRequest = RestRequest.getRequestForDelete(
                     getString(R.string.api_version),
-                    "group__c",
-                    group.getId()
+                    "player__c",
+                    user.getId()
             );
         } catch (Exception e) {
-            Log.d("==> deleteGroup: ", e.getMessage());
+            Log.d("==> deleteUser: ", e.getMessage());
             return;
         }
 
@@ -194,12 +214,12 @@ public class GroupDetailActivity extends SalesforceActivity implements AppCompat
                         // whether the REST request itself succeeded.
                         if (result.isSuccess()) {
                             try {
-                                String message = String.format("Grupo \"%s\" removido com sucesso!", group.getName());
-                                Toast.makeText(GroupDetailActivity.this, message, Toast.LENGTH_SHORT).show();
+                                String message = String.format("Grupo \"%s\" removido com sucesso!", user.getName());
+                                Toast.makeText(UserDetailActivity.this, message, Toast.LENGTH_SHORT).show();
 
-                                GroupDetailActivity.this.finish();
+                                UserDetailActivity.this.finish();
                             } catch (Exception e) {
-                                Toast.makeText(GroupDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UserDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                 Log.d("==> sendAsync: ", e.getMessage());
                             }
                         }
@@ -209,7 +229,7 @@ public class GroupDetailActivity extends SalesforceActivity implements AppCompat
 
             @Override
             public void onError(Exception e) {
-                Toast.makeText(GroupDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.d("==> onError: ", e.getMessage());
             }
         });
@@ -218,7 +238,7 @@ public class GroupDetailActivity extends SalesforceActivity implements AppCompat
     @Override
     public void onResume() {
         // Hide everything until we are logged in
-        findViewById(R.id.group_detail_constraint).setVisibility(View.INVISIBLE);
+        findViewById(R.id.user_detail_constraint).setVisibility(View.INVISIBLE);
 
         super.onResume();
     }
@@ -229,7 +249,7 @@ public class GroupDetailActivity extends SalesforceActivity implements AppCompat
         this.client = client;
 
         // Show everything
-        findViewById(R.id.group_detail_constraint).setVisibility(View.VISIBLE);
+        findViewById(R.id.user_detail_constraint).setVisibility(View.VISIBLE);
     }
 
     @Override

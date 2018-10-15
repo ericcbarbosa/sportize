@@ -65,16 +65,16 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void AddUser(String name, String email, String password, String address, String neighborhood, String city, String state) {
         Random rand = new Random();
-        User user = new User(rand.nextInt(100) + 5, name, email, password, address, neighborhood, city, state);
-        String message = "Usuário cadastrado com sucesso!\n\n" +
-                "Nome: " + user.getName() + "\n" +
-                "E-mail: " + user.getEmail() + "\n" +
-                "Endereço: " + user.getAddress() + "\n" +
-                "Bairro: " + user.getNeighborhood() + "\n" +
-                "Cidade: " + user.getCity() + "\n" +
-                "Estado: " + user.getState() + "\n";
+//        User user = new User(rand.nextInt(100) + 5, name, email, password, address, neighborhood, city, state);
+//        String message = "Usuário cadastrado com sucesso!\n\n" +
+//                "Nome: " + user.getName() + "\n" +
+//                "E-mail: " + user.getEmail() + "\n" +
+//                "Endereço: " + user.getAddress() + "\n" +
+//                "Bairro: " + user.getNeighborhood() + "\n" +
+//                "Cidade: " + user.getCity() + "\n" +
+//                "Estado: " + user.getState() + "\n";
 
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 //        goToLoginPage();
     }
 
