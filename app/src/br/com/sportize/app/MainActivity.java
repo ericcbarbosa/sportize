@@ -103,28 +103,6 @@ public class MainActivity extends SalesforceActivity
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        if (id == R.id.action_login) {
-//            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-//            startActivity(intent);
-
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -143,8 +121,6 @@ public class MainActivity extends SalesforceActivity
             Intent intent = new Intent(MainActivity.this, EventsActivity.class);
 
             startActivity(intent);
-        } else if (id == R.id.nav_logoff) {
-            logout();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

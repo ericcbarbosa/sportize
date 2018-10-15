@@ -335,19 +335,19 @@ public class EventsActivity extends SalesforceActivity implements AppCompatCallb
                         listAdapter.clear();
                         tryToLoadEvents();
 
-                        if (result.isSuccess()) {
-                            try {
-                                String reqMessage = result.asJSONObject().getString("message");
-
-                                if (reqMessage != null) {
-                                    Toast.makeText(EventsActivity.this, reqMessage, Toast.LENGTH_SHORT).show();
-                                }
-
-                            } catch (Exception e) {
-                                Toast.makeText(EventsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                Log.d("==> sendAsync: ", e.getMessage());
-                            }
-                        }
+//                        if (result.isSuccess()) {
+//                            try {
+//                                String reqMessage = result.asJSONObject().getString("message");
+//
+//                                if (reqMessage != null) {
+//                                    Toast.makeText(EventsActivity.this, reqMessage, Toast.LENGTH_SHORT).show();
+//                                }
+//
+//                            } catch (Exception e) {
+//                                Toast.makeText(EventsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+//                                Log.d("==> sendAsync: ", e.getMessage());
+//                            }
+//                        }
                     }
                 });
             }
