@@ -27,7 +27,7 @@
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/user_title_add"
+                android:text="@string/event_title_add"
                 android:textColor="@color/colorAccent"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -35,77 +35,88 @@
                 tools:layout_editor_absoluteY="16dp" />
 
             <EditText
-                android:id="@+id/user_register_name"
+                android:id="@+id/event_register_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/user_out_name"
+                android:hint="@string/event_out_name"
                 android:inputType="textCapWords"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:layout_editor_absoluteY="55dp" />
 
             <EditText
-                android:id="@+id/user_register_password"
+                android:id="@+id/event_register_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/user_out_password"
-                android:inputType="textPassword"
+                android:hint="@string/event_out_description"
+                android:inputType="text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:layout_editor_absoluteY="55dp" />
 
             <EditText
-                android:id="@+id/user_register_email"
+                android:id="@+id/event_register_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/user_out_email"
-                android:inputType="textEmailAddress"
+                android:hint="@string/event_out_date"
+                android:inputType="date"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:layout_editor_absoluteY="55dp" />
 
             <EditText
-                android:id="@+id/user_register_address"
+                android:id="@+id/event_register_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/user_out_address"
+                android:hint="@string/event_out_time"
+                android:inputType="time"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="55dp" />
+
+            <EditText
+                android:id="@+id/event_register_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/event_out_state"
                 android:inputType="textCapWords"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:layout_editor_absoluteY="55dp" />
 
             <EditText
-                android:id="@+id/user_register_neighbor"
+                android:id="@+id/event_register_city"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/user_out_neighbor"
+                android:hint="@string/event_out_city"
                 android:inputType="textCapWords"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:layout_editor_absoluteY="55dp" />
 
             <EditText
-                android:id="@+id/user_register_city"
+                android:id="@+id/event_register_neighbor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/user_out_city"
+                android:hint="@string/event_out_neighbor"
                 android:inputType="textCapWords"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:layout_editor_absoluteY="55dp" />
 
             <EditText
-                android:id="@+id/user_register_state"
+                android:id="@+id/event_register_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/user_out_state"
+                android:hint="@string/event_out_address"
                 android:inputType="textCapWords"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -121,7 +132,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <Button
-                    android:id="@+id/user_register_btn_cancel"
+                    android:id="@+id/event_register_btn_cancel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="0dp"
@@ -129,7 +140,7 @@
                     android:layout_marginStart="0dp"
                     android:layout_weight="1"
                     android:background="@color/colorLight"
-                    android:text="@string/user_cancel"
+                    android:text="@string/event_cancel"
                     android:textColor="@color/colorDark"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -138,7 +149,7 @@
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <Button
-                    android:id="@+id/user_register_btn_add"
+                    android:id="@+id/event_register_btn_add"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="0dp"
@@ -146,7 +157,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:background="@color/colorSuccess"
-                    android:text="@string/user_add"
+                    android:text="@string/event_add"
                     android:textColor="@color/colorSuccessInvert"
                     android:textSize="14sp"
                     android:textStyle="bold"

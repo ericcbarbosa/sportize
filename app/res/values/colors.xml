@@ -6,17 +6,17 @@
     <color name="colorDarker">#222222</color>
 
 
-    <color name="colorPrimary">#ff4545</color>
+    <color name="colorPrimary">#28a00d</color>
     <color name="colorPrimaryInvert">#ffffff</color>
-    <color name="colorPrimaryDark">#9b2626</color>
+    <color name="colorPrimaryDark">#1b7008</color>
 
-    <color name="colorAccent">#4070ff</color>
+    <color name="colorAccent">#1b7008</color>
     <color name="colorAccentInvert">#ffffff</color>
 
-    <color name="colorSuccess">#12b72d</color>
+    <color name="colorSuccess">#28a00d</color>
     <color name="colorSuccessInvert">#ffffff</color>
 
-    <color name="colorDanger">#ff004d</color>
+    <color name="colorDanger">#2a6c1b</color>
     <color name="colorDangerInvert">#ffffff</color>
 
     <color name="colorInfo">#5e87ff</color>
@@ -25,6 +25,6 @@
     <color name="colorWarning">#dfc42a</color>
     <color name="colorWarningInvert">#ffffff</color>
 
-    <color name="colorGradientStart">#ff4545</color>
-    <color name="colorGradientEnd">#ff6363</color>
+    <color name="colorGradientStart">#2a6c1b</color>
+    <color name="colorGradientEnd">#28a00d</color>
 </resources>

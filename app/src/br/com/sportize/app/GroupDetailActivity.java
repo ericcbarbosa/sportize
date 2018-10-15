@@ -1,7 +1,5 @@
 package br.com.sportize.app;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatCallback;
@@ -9,12 +7,9 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.salesforce.androidsdk.rest.RestClient;
@@ -22,10 +17,6 @@ import com.salesforce.androidsdk.rest.RestRequest;
 import com.salesforce.androidsdk.rest.RestResponse;
 import com.salesforce.androidsdk.ui.SalesforceActivity;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,7 +43,7 @@ public class GroupDetailActivity extends SalesforceActivity implements AppCompat
         // Delegate
         delegate = AppCompatDelegate.create(this, this);
         delegate.onCreate(savedInstanceState);
-        delegate.setContentView(R.layout.activity_group_detail);
+        delegate.setContentView(R.layout.group_detail_update);
 
         // Configura toolbar
         Toolbar toolbar = findViewById(R.id.group_detail_toolbar);

@@ -61,20 +61,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.com.sportize.app.adapter.UserAdapter;
-import br.com.sportize.app.model.User;
+import br.com.sportize.app.adapter.EventAdapter;
+import br.com.sportize.app.model.Event;
 
-public class UsersActivity extends SalesforceActivity implements AppCompatCallback {
+public class EventsActivity extends SalesforceActivity implements AppCompatCallback {
     private RestClient client;
-    private ArrayAdapter<User> listAdapter;
-    private ArrayList<User> userList;
+    private ArrayAdapter<Event> listAdapter;
+    private ArrayList<Event> eventList;
     private AppCompatDelegate delegate;
 
     View view;
 
     private EditText txtName;
-    private EditText txtPassword;
-    private EditText txtEmail;
+    private EditText txtDescription;
+    private EditText txtDate;
+    private EditText txtTime;
     private EditText txtAddress;
     private EditText txtNeighbor;
     private EditText txtCity;
@@ -88,17 +89,17 @@ public class UsersActivity extends SalesforceActivity implements AppCompatCallba
 		super.onCreate(savedInstanceState);
 
 		// Setup view
-		setContentView(R.layout.user_main);
+		setContentView(R.layout.event_main);
 
         // Delegate
         delegate = AppCompatDelegate.create(this, this);
         delegate.onCreate(savedInstanceState);
-        delegate.setContentView(R.layout.user_main);
+        delegate.setContentView(R.layout.event_main);
 
         // Configura toolbar
-        Toolbar toolbar = findViewById(R.id.user_home_toolbar);
+        Toolbar toolbar = findViewById(R.id.event_home_toolbar);
 
-        toolbar.setTitle("Jogadores");
+        toolbar.setTitle("Eventos");
         toolbar.setNavigationIcon(R.drawable.ic_action_arrow_left);
 
         delegate.setSupportActionBar(toolbar);
@@ -111,9 +112,9 @@ public class UsersActivity extends SalesforceActivity implements AppCompatCallba
             }
         });
 
-        FloatingActionButton btnAddUser = findViewById(R.id.user_fab_add);
+        FloatingActionButton btnAddEvent = findViewById(R.id.event_fab_add);
 
-        btnAddUser.setOnClickListener(new View.OnClickListener() {
+        btnAddEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 displayDialog();
@@ -126,27 +127,29 @@ public class UsersActivity extends SalesforceActivity implements AppCompatCallba
 		// Hide everything until we are logged in
 		findViewById(R.id.root).setVisibility(View.INVISIBLE);
 
-		userList = new ArrayList<User>();
-		listAdapter = new UserAdapter(UsersActivity.this, userList);
+		eventList = new ArrayList<Event>();
+		listAdapter = new EventAdapter(EventsActivity.this, eventList);
 
-		ListView listView = findViewById(R.id.users_list);
+		ListView listView = findViewById(R.id.events_list);
 		listView.setAdapter(listAdapter);
 
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				User user = userList.get(position);
+				Event event = eventList.get(position);
 
-				Intent intent = new Intent(UsersActivity.this, UserDetailActivity.class);
+				Intent intent = new Intent(EventsActivity.this, EventDetailActivity.class);
 
-				intent.putExtra("id", user.getId());
-				intent.putExtra("name", user.getName());
-				intent.putExtra("email", user.getEmail());
-				intent.putExtra("password", user.getPassword());
-                intent.putExtra("address", user.getAddress());
-                intent.putExtra("neighborhood", user.getNeighborhood());
-				intent.putExtra("city", user.getCity());
-				intent.putExtra("state", user.getState());
+				intent.putExtra("id", event.getId());
+				intent.putExtra("groupId", event.getGroupId());
+				intent.putExtra("name", event.getName());
+				intent.putExtra("description", event.getDescription());
+				intent.putExtra("date", event.getOccurrenceDate());
+				intent.putExtra("time", event.getOccurrenceTime());
+				intent.putExtra("state", event.getState());
+				intent.putExtra("city", event.getCity());
+                intent.putExtra("neighborhood", event.getNeighborhood());
+                intent.putExtra("address", event.getAddress());
 
 				startActivity(intent);
 			}
@@ -163,17 +166,17 @@ public class UsersActivity extends SalesforceActivity implements AppCompatCallba
 		// Show everything
 		findViewById(R.id.root).setVisibility(View.VISIBLE);
 
-		// Get users
-        tryToLoadUsers();
+		// Get Events
+        tryToLoadEvents();
 	}
 
 
     // DIALOG
     public void displayDialog() {
-        final Dialog dialog = new Dialog(UsersActivity.this);
+        final Dialog dialog = new Dialog(EventsActivity.this);
 
-        dialog.setTitle("Cadastrar Grupo");
-        dialog.setContentView(R.layout.user_register);
+        dialog.setTitle("Cadastrar Evento");
+        dialog.setContentView(R.layout.event_register);
         dialog.setCancelable(false);
 
 //        int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
@@ -181,36 +184,38 @@ public class UsersActivity extends SalesforceActivity implements AppCompatCallba
 //
 //        dialog.getWindow().setLayout(width, height);
 
-        txtName = dialog.findViewById(R.id.user_register_name);
-        txtEmail = dialog.findViewById(R.id.user_register_email);
-        txtPassword = dialog.findViewById(R.id.user_register_password);
-        txtAddress = dialog.findViewById(R.id.user_register_address);
-        txtNeighbor = dialog.findViewById(R.id.user_register_neighbor);
-        txtCity = dialog.findViewById(R.id.user_register_city);
-        txtState = dialog.findViewById(R.id.user_register_state);
+        txtName = dialog.findViewById(R.id.event_register_name);
+        txtDescription = dialog.findViewById(R.id.event_register_description);
+        txtDate = dialog.findViewById(R.id.event_register_date);
+        txtTime = dialog.findViewById(R.id.event_register_time);
+        txtAddress = dialog.findViewById(R.id.event_register_address);
+        txtNeighbor = dialog.findViewById(R.id.event_register_neighbor);
+        txtCity = dialog.findViewById(R.id.event_register_city);
+        txtState = dialog.findViewById(R.id.event_register_state);
 
-        btnAddRegister = dialog.findViewById(R.id.user_register_btn_add);
-        btnCancel = dialog.findViewById(R.id.user_register_btn_cancel);
+        btnAddRegister = dialog.findViewById(R.id.event_register_btn_add);
+        btnCancel = dialog.findViewById(R.id.event_register_btn_cancel);
 
         btnAddRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Map<String, Object> fields = new HashMap<String, Object>();
 
-                if (txtName.getText().toString() != null && txtEmail.getText().toString() != null) {
+                if (txtName.getText() != null && txtDate.getText() != null) {
                     fields.put("Name", txtName.getText().toString());
-                    fields.put("email__c", txtEmail.getText().toString());
-                    fields.put("password__c", txtPassword.getText().toString());
-                    fields.put("address__c", txtAddress.getText().toString());
-                    fields.put("neighborhood__c", txtNeighbor.getText().toString());
-                    fields.put("city__c", txtCity.getText().toString());
+                    fields.put("description__c", txtDescription.getText().toString());
+                    fields.put("event_date__c", txtDate.getText().toString());
+                    fields.put("event_time__c", txtTime.getText().toString());
+                    fields.put("event_address__c", txtAddress.getText().toString());
+                    fields.put("event_neighborhood__c", txtNeighbor.getText().toString());
+                    fields.put("event_city__c", txtCity.getText().toString());
                     fields.put("state__c", txtState.getText().toString());
 
-                    tryToAddNewUser(fields);
+                    tryToAddNewEvent(fields);
 
                     dialog.dismiss();
                 } else {
-                    Toast.makeText(UsersActivity.this, "Informe os dados do jogador para cadastrar.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EventsActivity.this, "Informe os dados do jogador para cadastrar.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -225,7 +230,7 @@ public class UsersActivity extends SalesforceActivity implements AppCompatCallba
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-//                tryToLoadUsers();
+                tryToLoadEvents();
             }
         });
 
@@ -233,18 +238,18 @@ public class UsersActivity extends SalesforceActivity implements AppCompatCallba
     }
 
     // API REQUESTS
-    private void tryToLoadUsers() {
+    private void tryToLoadEvents() {
         try {
-            loadUsers();
+            loadEvents();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
 
-    private void loadUsers() throws UnsupportedEncodingException {
+    private void loadEvents() throws UnsupportedEncodingException {
         RestRequest restRequest = RestRequest.getRequestForQuery(
                 ApiVersionStrings.getVersionNumber(this),
-                "SELECT Id, Name, email__c, password__c, state__c, city__c, address__c, neighborhood__c FROM player__c\t"
+                "SELECT Id, Name, description__c, event_group__c, event_date__c, event_time__c, state__c, event_city__c, event_address__c, event_neighborhood__c FROM event__c\t"
         );
 
         client.sendAsync(restRequest, new AsyncRequestCallback() {
@@ -258,23 +263,25 @@ public class UsersActivity extends SalesforceActivity implements AppCompatCallba
                             listAdapter.clear();
                             JSONArray records = result.asJSONObject().getJSONArray("records");
 
-                            // TODO: Extrair dados do JSON e transformar em User
+                            // TODO: Extrair dados do JSON e transformar em Evento
                             for (int i = 0; i < records.length(); i++) {
 
                                 JSONObject record = records.getJSONObject(i);
 
-                                User user = new User(
+                                Event event = new Event(
                                         record.getString("Id"),
+                                        record.getString("event_group__c"),
                                         record.getString("Name"),
-                                        record.getString("email__c"),
-                                        record.getString("password__c"),
-                                        record.getString("address__c"),
-                                        record.getString("neighborhood__c"),
-                                        record.getString("city__c"),
+                                        record.getString("description__c"),
+                                        record.getString("event_date__c"),
+                                        record.getString("event_time__c"),
+                                        record.getString("event_address__c"),
+                                        record.getString("event_neighborhood__c"),
+                                        record.getString("event_city__c"),
                                         record.getString("state__c")
                                 );
 
-                                userList.add(user);
+                                eventList.add(event);
                             }
                         } catch (Exception e) {
                             onError(e);
@@ -288,29 +295,29 @@ public class UsersActivity extends SalesforceActivity implements AppCompatCallba
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(UsersActivity.this,
-                                UsersActivity.this.getString(
+                        Toast.makeText(EventsActivity.this,
+                                EventsActivity.this.getString(
                                         SalesforceSDKManager.getInstance().getSalesforceR().stringGenericError(),
                                         exception.toString()
                                 ),
                                 Toast.LENGTH_LONG).show();
 
-                        Log.i("==> LoadUser:", exception.toString());
+                        Log.i("==> LoadEvent:", exception.toString());
                     }
                 });
             }
         });
     }
 
-    private void tryToAddNewUser(Map<String, Object> fields) {
+    private void tryToAddNewEvent(Map<String, Object> fields) {
         try {
-            addNewUser(fields);
+            addNewEvent(fields);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
 
-    private void addNewUser(Map<String, Object> fields) throws UnsupportedEncodingException {
+    private void addNewEvent(Map<String, Object> fields) throws UnsupportedEncodingException {
         RestRequest restRequest = RestRequest.getRequestForCreate(
                 ApiVersionStrings.getVersionNumber(this),
                 "player__c",
@@ -325,7 +332,18 @@ public class UsersActivity extends SalesforceActivity implements AppCompatCallba
                     @Override
                     public void run() {
                         listAdapter.clear();
-                        tryToLoadUsers();
+                        tryToLoadEvents();
+
+                        if (result.isSuccess()) {
+                            try {
+                                String reqMessage = result.asJSONObject().getString("message");
+
+                                Toast.makeText(EventsActivity.this, reqMessage, Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                Toast.makeText(EventsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Log.d("==> sendAsync: ", e.getMessage());
+                            }
+                        }
                     }
                 });
             }
@@ -335,8 +353,8 @@ public class UsersActivity extends SalesforceActivity implements AppCompatCallba
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(UsersActivity.this,
-                                UsersActivity.this.getString(
+                        Toast.makeText(EventsActivity.this,
+                                EventsActivity.this.getString(
                                         SalesforceSDKManager.getInstance().getSalesforceR().stringGenericError(),
                                         exception.toString()
                                 ),

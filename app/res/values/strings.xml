@@ -21,13 +21,13 @@
     <!-- MENU -->
     <string name="nav_item_user">Usuário</string>
     <string name="nav_item_groups">Grupos</string>
+    <string name="nav_item_event">Eventos</string>
     <string name="nav_item_about">Sobre</string>
     <string name="nav_item_config">Configurações</string>
     <string name="nav_item_logoff">Deslogar</string>
 
     <!-- LOGIN -->
     <string name="login_btn_access">Entrar</string>
-
 
     <!-- User : Data -->
     <string name="user_out_name">Nome</string>
@@ -37,6 +37,7 @@
     <string name="user_out_neighbor">Bairro</string>
     <string name="user_out_city">Cidade</string>
     <string name="user_out_state">Estado</string>
+    <string name="user_detail_out_description">Clique em salvar para armazenar suar alterações.</string>
 
     <!-- User : Actions -->
     <string name="user_remove">Remover usuário</string>
@@ -73,6 +74,7 @@
     <string name="event_out_name">Nome</string>
     <string name="event_out_description">Descrição</string>
     <string name="event_out_date">Data</string>
+    <string name="event_out_time">Horário</string>
     <string name="event_out_address">Endereço</string>
     <string name="event_out_neighbor">Bairro</string>
     <string name="event_out_city">Cidade</string>
@@ -80,9 +82,16 @@
     <string name="event_out_group">Grupo</string>
 
     <!-- Event  : Actions -->
-    <string name="event_remove">Remover evento</string>
-    <string name="event_add">Adicionar evento</string>
+    <string name="event_remove">Remover</string>
+    <string name="event_add">Adicionar</string>
+    <string name="event_cancel">Cancelar</string>
     <string name="title_activity_login">Entrar</string>
+
+    <!-- User : Titles & Page Descriptions -->
+    <string name="event_title_add">Cadastrar evento</string>
+    <string name="event_title_edit">Editar evento</string>
+    <string name="event_description_add">Preencha os dados abaixo para adicionar um novo evento</string>
+    <string name="event_description_edit">Altere os dados abaixo e clique no botão salvar para alterar os dados do evento</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -94,7 +103,4 @@
     <string name="error_incorrect_password">A senha está incorreta</string>
     <string name="error_field_required">Esté campo é obrigatório</string>
     <string name="permission_rationale">"As permissões de contato são necessárias para autocomplete de e-mail"</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

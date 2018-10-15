@@ -11,16 +11,17 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import br.com.sportize.app.R;
+import br.com.sportize.app.model.Event;
 import br.com.sportize.app.model.User;
 
-public class UserAdapter extends ArrayAdapter<User>  {
+public class EventAdapter extends ArrayAdapter<Event>  {
     private Context context;
-    private ArrayList<User> userList;
+    private ArrayList<Event> eventList;
 
-    public UserAdapter(Context context, ArrayList<User> userList) {
-        super(context, 0, userList);
+    public EventAdapter(Context context, ArrayList<Event> eventList) {
+        super(context, 0, eventList);
         this.context = context;
-        this.userList = userList;
+        this.eventList = eventList;
     }
 
     @NonNull
@@ -30,21 +31,21 @@ public class UserAdapter extends ArrayAdapter<User>  {
         View view = null;
 
         // Verifica se a lista está vazia
-        if (userList != null) {
+        if (eventList != null) {
             // inicializar objeto para montagem da view
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 
             // Monta view a partir do xml
-            view = inflater.inflate(R.layout.user_item, parent, false);
+            view = inflater.inflate(R.layout.event_item, parent, false);
 
             // recupera elemento para exibição
-            TextView txtName = view.findViewById(R.id.user_out_name);
-            TextView txtEmail = view.findViewById(R.id.user_out_email);
+            TextView txtName = view.findViewById(R.id.event_out_name);
+            TextView txtDescription = view.findViewById(R.id.event_out_description);
 
-            User user = userList.get(position);
+            Event event = eventList.get(position);
 
-            txtName.setText(user.getName());
-            txtEmail.setText(user.getEmail());
+            txtName.setText(event.getName());
+            txtDescription.setText(event.getDescription());
         }
 
         return view;

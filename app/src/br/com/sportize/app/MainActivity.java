@@ -29,8 +29,6 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
-import br.com.sportize.app.model.Group;
-
 public class MainActivity extends SalesforceActivity
         implements NavigationView.OnNavigationItemSelectedListener, AppCompatCallback {
 
@@ -46,7 +44,7 @@ public class MainActivity extends SalesforceActivity
         // Delegate
         delegate = AppCompatDelegate.create(this, this);
         delegate.onCreate(savedInstanceState);
-        delegate.setContentView(R.layout.activity_group_detail);
+        delegate.setContentView(R.layout.group_detail_update);
 
         setContentView(R.layout.activity_main);
 
@@ -137,21 +135,21 @@ public class MainActivity extends SalesforceActivity
             Intent intent = new Intent(MainActivity.this, UsersActivity.class);
 
             startActivity(intent);
-
         } else if (id == R.id.nav_groups) {
             Intent intent = new Intent(MainActivity.this, GroupsActivity.class);
 
             startActivity(intent);
-        } else if (id == R.id.nav_about) {
+        } else if (id == R.id.nav_event) {
+            Intent intent = new Intent(MainActivity.this, EventsActivity.class);
 
-        } else if (id == R.id.nav_config) {
-
+            startActivity(intent);
         } else if (id == R.id.nav_logoff) {
-
+            logout();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 
@@ -206,6 +204,10 @@ public class MainActivity extends SalesforceActivity
                 });
             }
         });
+    }
+
+    public void logout() {
+        SalesforceSDKManager.getInstance().logout(this);
     }
 
     @Override

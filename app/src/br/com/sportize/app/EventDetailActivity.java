@@ -20,20 +20,20 @@ import com.salesforce.androidsdk.ui.SalesforceActivity;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.com.sportize.app.model.User;
+import br.com.sportize.app.model.Event;
 
-public class UserDetailActivity extends SalesforceActivity implements AppCompatCallback {
+public class EventDetailActivity extends SalesforceActivity implements AppCompatCallback {
 
     private RestClient client;
     private AppCompatDelegate delegate;
 
-    // Extras: dados do grupo
-    private User user;
-
-    // View
+    // Extras: dados do Evento
+    private Event event;
+    
     EditText editName;
-    EditText editEmail;
-    EditText editPassword;
+    EditText txtDescription;
+    EditText txtDate;
+    EditText txtTime;
     EditText editAddress;
     EditText editCity;
     EditText editState;
@@ -49,10 +49,10 @@ public class UserDetailActivity extends SalesforceActivity implements AppCompatC
         // Delegate
         delegate = AppCompatDelegate.create(this, this);
         delegate.onCreate(savedInstanceState);
-        delegate.setContentView(R.layout.user_detail_update);
+        delegate.setContentView(R.layout.event_detail_update);
 
         // Configura toolbar
-        Toolbar toolbar = findViewById(R.id.user_detail_toolbar);
+        Toolbar toolbar = findViewById(R.id.event_detail_toolbar);
 
         toolbar.setTitle("Detalhes do Jogador");
         toolbar.setNavigationIcon(R.drawable.ic_action_arrow_left);
@@ -71,26 +71,29 @@ public class UserDetailActivity extends SalesforceActivity implements AppCompatC
     }
 
     private void setContent() {
-        editName = findViewById(R.id.user_detail_name);
-        editEmail = findViewById(R.id.user_detail_email);
-        editPassword = findViewById(R.id.user_detail_password);
-        editState = findViewById(R.id.user_detail_state);
-        editCity = findViewById(R.id.user_detail_city);
-        editNeighborhood = findViewById(R.id.user_detail_neighbor);
-        editAddress = findViewById(R.id.user_detail_address);
+        editName = findViewById(R.id.event_detail_name);
+        txtDescription = findViewById(R.id.event_detail_description);
+        txtDate = findViewById(R.id.event_detail_date);
+        txtTime = findViewById(R.id.event_detail_time);
+        editState = findViewById(R.id.event_detail_state);
+        editCity = findViewById(R.id.event_detail_city);
+        editNeighborhood = findViewById(R.id.event_detail_neighbor);
+        editAddress = findViewById(R.id.event_detail_address);
 
-        btnUpdate = findViewById(R.id.user_detail_btn_update);
-        btnRemove = findViewById(R.id.user_detail_btn_remove);
+        btnUpdate = findViewById(R.id.event_detail_btn_update);
+        btnRemove = findViewById(R.id.event_detail_btn_remove);
 
         // Extras
         Bundle extra = getIntent().getExtras();
 
         if (extra != null) {
-            user = new User(
+            event = new Event(
                     extra.getString("id"),
+                    extra.getString("groupId"),
                     extra.getString("name"),
-                    extra.getString("email"),
-                    extra.getString("password"),
+                    extra.getString("description"),
+                    extra.getString("date"),
+                    extra.getString("time"),
                     extra.getString("address"),
                     extra.getString("neighborhood"),
                     extra.getString("city"),
@@ -98,13 +101,14 @@ public class UserDetailActivity extends SalesforceActivity implements AppCompatC
             );
         }
 
-        editName.setText(user.getName());
-        editEmail.setText(user.getEmail());
-        editPassword.setText(user.getPassword());
-        editState.setText(user.getState());
-        editCity.setText(user.getCity());
-        editNeighborhood.setText(user.getNeighborhood());
-        editAddress.setText(user.getAddress());
+        editName.setText(event.getName());
+        txtDescription.setText(event.getDescription());
+        txtDate.setText(event.getOccurrenceDate());
+        txtTime.setText(event.getOccurrenceTime());
+        editAddress.setText(event.getAddress());
+        editCity.setText(event.getCity());
+        editState.setText(event.getState());
+        editNeighborhood.setText(event.getNeighborhood());
 
         // Listeners
         btnUpdate.setOnClickListener(new View.OnClickListener() {
@@ -113,35 +117,36 @@ public class UserDetailActivity extends SalesforceActivity implements AppCompatC
                 Map<String, Object> fields = new HashMap<String, Object>();
 
                 fields.put("Name", editName.getText().toString());
-                fields.put("email__c", editEmail.getText().toString());
-                fields.put("password__c", editPassword.getText().toString());
+                fields.put("description__c", txtDescription.getText().toString());
+                fields.put("event_date__c", txtDate.getText().toString());
+                fields.put("event_time__c", txtTime.getText().toString());
+                fields.put("event_city__c", editCity.getText().toString());
+                fields.put("event_neighborhood__c", editNeighborhood.getText().toString());
+                fields.put("event_address__c", editAddress.getText().toString());
                 fields.put("state__c", editState.getText().toString());
-                fields.put("city__c", editCity.getText().toString());
-                fields.put("neighborhood__c", editNeighborhood.getText().toString());
-                fields.put("address__c", editAddress.getText().toString());
 
-                saveUser(user.getId(), fields);
+                saveEvent(event.getId(), fields);
             }
         });
 
         btnRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeUser(user);
+                removeEvent(event);
             }
         });
     }
 
-    private void saveUser(String id, final Map<String, Object> fields)  {
+    private void saveEvent(String id, final Map<String, Object> fields)  {
         RestRequest restRequest;
 
         try {
             restRequest = RestRequest.getRequestForUpdate(
                     getString(R.string.api_version),
-                    "player__c", id, fields
+                    "event__c", id, fields
             );
         } catch (Exception e) {
-            Log.d("==> saveUser: ", e.getMessage());
+            Log.d("==> saveEvent: ", e.getMessage());
             return;
         }
 
@@ -161,12 +166,12 @@ public class UserDetailActivity extends SalesforceActivity implements AppCompatC
                         // whether the REST request itself succeeded.
                         if (result.isSuccess()) {
                             try {
-                                String message = String.format("Dados do jogador \"%s\" atualizados com sucesso!", fields.get("Name"));
+                                String message = String.format("Dados do evento \"%s\" atualizados com sucesso!", fields.get("Name"));
 
-                                Toast.makeText(UserDetailActivity.this, message, Toast.LENGTH_SHORT).show();
-                                UserDetailActivity.this.finish();
+                                Toast.makeText(EventDetailActivity.this, message, Toast.LENGTH_SHORT).show();
+                                EventDetailActivity.this.finish();
                             } catch (Exception e) {
-                                Toast.makeText(UserDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(EventDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                 Log.d("==> sendAsync: ", e.getMessage());
                             }
                         }
@@ -176,23 +181,23 @@ public class UserDetailActivity extends SalesforceActivity implements AppCompatC
 
             @Override
             public void onError(Exception e) {
-                Toast.makeText(UserDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(EventDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.d("==> onError: ", e.getMessage());
             }
         });
     }
 
-    private void removeUser(final User user) {
+    private void removeEvent(final Event event) {
         RestRequest restRequest;
 
         try {
             restRequest = RestRequest.getRequestForDelete(
                     getString(R.string.api_version),
-                    "player__c",
-                    user.getId()
+                    "event__c",
+                    event.getId()
             );
         } catch (Exception e) {
-            Log.d("==> deleteUser: ", e.getMessage());
+            Log.d("==> deleteUEvent: ", e.getMessage());
             return;
         }
 
@@ -212,12 +217,12 @@ public class UserDetailActivity extends SalesforceActivity implements AppCompatC
                         // whether the REST request itself succeeded.
                         if (result.isSuccess()) {
                             try {
-                                String message = String.format("Grupo \"%s\" removido com sucesso!", user.getName());
-                                Toast.makeText(UserDetailActivity.this, message, Toast.LENGTH_SHORT).show();
+                                String message = String.format("Evento \"%s\" removido com sucesso!", event.getName());
+                                Toast.makeText(EventDetailActivity.this, message, Toast.LENGTH_SHORT).show();
 
-                                UserDetailActivity.this.finish();
+                                EventDetailActivity.this.finish();
                             } catch (Exception e) {
-                                Toast.makeText(UserDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(EventDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                 Log.d("==> sendAsync: ", e.getMessage());
                             }
                         }
@@ -227,7 +232,7 @@ public class UserDetailActivity extends SalesforceActivity implements AppCompatC
 
             @Override
             public void onError(Exception e) {
-                Toast.makeText(UserDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(EventDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.d("==> onError: ", e.getMessage());
             }
         });
@@ -236,7 +241,7 @@ public class UserDetailActivity extends SalesforceActivity implements AppCompatC
     @Override
     public void onResume() {
         // Hide everything until we are logged in
-        findViewById(R.id.user_detail_constraint).setVisibility(View.INVISIBLE);
+        findViewById(R.id.event_detail_constraint).setVisibility(View.INVISIBLE);
 
         super.onResume();
     }
@@ -247,7 +252,7 @@ public class UserDetailActivity extends SalesforceActivity implements AppCompatC
         this.client = client;
 
         // Show everything
-        findViewById(R.id.user_detail_constraint).setVisibility(View.VISIBLE);
+        findViewById(R.id.event_detail_constraint).setVisibility(View.VISIBLE);
     }
 
     @Override

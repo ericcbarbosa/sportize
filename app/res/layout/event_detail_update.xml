@@ -2,13 +2,13 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/user_detail_constraint"
+    android:id="@+id/event_detail_constraint"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".GroupDetailActivity">
 
     <include
-        android:id="@+id/user_detail_toolbar"
+        android:id="@+id/event_detail_toolbar"
         layout="@layout/toolbar"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -18,97 +18,124 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_detail_toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/event_detail_toolbar">
 
         <TextView
             android:id="@+id/txtName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginTop="16dp"
-            android:text="@string/user_title_edit"
+            android:text="@string/event_title_edit"
             android:textAlignment="viewStart"
             android:textColor="@color/colorAccent"
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/user_detail_toolbar" />
+            app:layout_constraintTop_toBottomOf="@+id/event_detail_toolbar" />
+
+        <TextView
+            android:id="@+id/group_detail_out_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginStart="0dp"
+            android:text="@string/event_description_edit"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/group_detail_out_name" />
 
         <EditText
-            android:id="@+id/user_detail_name"
+            android:id="@+id/event_detail_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/user_out_name"
+            android:hint="@string/event_out_name"
             android:inputType="text|textCapWords"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:layout_editor_absoluteY="55dp" />
 
         <EditText
-            android:id="@+id/user_detail_password"
+            android:id="@+id/event_detail_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/user_out_password"
-            android:inputType="textPassword"
+            android:hint="@string/event_out_description"
+            android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:layout_editor_absoluteY="55dp" />
 
         <EditText
-            android:id="@+id/user_detail_city"
+            android:id="@+id/event_detail_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/user_out_city"
+            android:hint="@string/event_out_date"
+            android:inputType="date"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="55dp" />
+
+        <EditText
+            android:id="@+id/event_detail_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/event_out_time"
+            android:inputType="time"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="55dp" />
+
+        <EditText
+            android:id="@+id/event_detail_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/event_out_state"
             android:inputType="textCapWords"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:layout_editor_absoluteY="55dp" />
 
         <EditText
-            android:id="@+id/user_detail_email"
+            android:id="@+id/event_detail_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/user_out_email"
-            android:inputType="textEmailAddress"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="55dp" />
-
-        <EditText
-            android:id="@+id/user_detail_state"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/user_out_state"
+            android:hint="@string/event_out_city"
             android:inputType="textCapWords"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:layout_editor_absoluteY="55dp" />
 
         <EditText
-            android:id="@+id/user_detail_address"
+            android:id="@+id/event_detail_neighbor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/user_out_address"
+            android:hint="@string/event_out_neighbor"
             android:inputType="textCapWords"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:layout_editor_absoluteY="55dp" />
 
         <EditText
-            android:id="@+id/user_detail_neighbor"
+            android:id="@+id/event_detail_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/user_out_neighbor"
+            android:hint="@string/event_out_address"
             android:inputType="textCapWords"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -121,7 +148,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/user_detail_btn_remove"
+                android:id="@+id/event_detail_btn_remove"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -134,10 +161,10 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/user_detail_btn_update" />
+                app:layout_constraintTop_toBottomOf="@+id/event_detail_btn_update" />
 
             <Button
-                android:id="@+id/user_detail_btn_update"
+                android:id="@+id/event_detail_btn_update"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
