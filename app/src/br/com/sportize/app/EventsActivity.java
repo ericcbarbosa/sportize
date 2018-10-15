@@ -210,6 +210,7 @@ public class EventsActivity extends SalesforceActivity implements AppCompatCallb
                     fields.put("event_neighborhood__c", txtNeighbor.getText().toString());
                     fields.put("event_city__c", txtCity.getText().toString());
                     fields.put("state__c", txtState.getText().toString());
+                    fields.put("event_group__c", "a045A00001PR7JfQAL");
 
                     tryToAddNewEvent(fields);
 
@@ -320,7 +321,7 @@ public class EventsActivity extends SalesforceActivity implements AppCompatCallb
     private void addNewEvent(Map<String, Object> fields) throws UnsupportedEncodingException {
         RestRequest restRequest = RestRequest.getRequestForCreate(
                 ApiVersionStrings.getVersionNumber(this),
-                "player__c",
+                "event__c",
                 fields
         );
 
@@ -338,7 +339,10 @@ public class EventsActivity extends SalesforceActivity implements AppCompatCallb
                             try {
                                 String reqMessage = result.asJSONObject().getString("message");
 
-                                Toast.makeText(EventsActivity.this, reqMessage, Toast.LENGTH_SHORT).show();
+                                if (reqMessage != null) {
+                                    Toast.makeText(EventsActivity.this, reqMessage, Toast.LENGTH_SHORT).show();
+                                }
+
                             } catch (Exception e) {
                                 Toast.makeText(EventsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                 Log.d("==> sendAsync: ", e.getMessage());
